@@ -19,8 +19,8 @@
         \end{itemize}
     \subsection{Deep Learning to Predict XLogP from SMILES and fragments}
         \begin{itemize}
-            \item This model is similar to the first model, except that it has two embedding layers instead of one. 
-            \item One of the embedding layers receives the SMILES strings and the other receives fragments of the chemical compound.
+            \item This model is similar to the first model, it differs in that it receives 2 inputs and has an embedding layer for each. 
+            \item One of the embedding layers receives the SMILES strings and the other receives the RECAP fragments of the chemical compound.
             \item These two embedding layers are then concatenated and supplied to the 1D CNN as input.
             \item After this the architecture follows the same structure as the previous models.
             \item The output for this model was the predicted XLogP of the chemical compound.
