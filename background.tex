@@ -29,10 +29,18 @@ For the purpose of this paper, we shall focus on a sub-set of PubChem that conta
 PubChem has many more data elements, and we encourage the interested reader to further explore this comprehensive database. 
 
 \subsection{SMILES Representations\label{smiles}}
-The Simplified Molecular Input Line Entry System (SMILES) is a character-based line notation for describing chemical structures in a way that is easier for computers to interpret. SMILES strings can be mapped into two-dimensional or three-dimensional models of the spatial organization of the atoms in the molecules being represented by the string. The notation consists of a series of characters containing no spaces that uses a simple vocabulary and a few grammar rules. In this notation atoms are represented by their atomic symbol while bonds and branches are represented by special characters.
+The Simplified Molecular Input Line Entry System (SMILES) is a character-based line notation for describing chemical structures in a way that is easier for computers to interpret. SMILES strings can be mapped into two-dimensional or three-dimensional models of the spatial organization of the atoms in the molecules being represented by the string. The notation consists of a series of characters containing no spaces that uses a simple vocabulary and a few grammar rules. In this notation atoms are represented by their atomic symbol while bonds and branches are represented by special characters. Figure \ref{fig:cyclamic}, obtained from PubChem,  shows the 2-D chemical structure depiction for the compound Cyclamic acid. The molecular formula for this compound is C6H13NO3S, and its canonical SMILES representation is C1CCC(CC1)NS(=O)(=O)O.
 
+\begin{figure}[htb]
+        \centering
+        \includegraphics[width=0.20\textwidth]{figures/cyclamic_acid.png}
+        %\includegraphics[width=0.25\textwidth]{figures/Smiles-Smile2.png}
+        \caption{2-D chemical structure of Cyclamic acid.}
+        \label{fig:cyclamic}
+    \end{figure}
+    
 One complication with SMILES is that straightforward application of the basic rules for generating a SMILES string can yield more than one string representation per molecule. To solve this, some {\em canonicalization} algorithm is typically used in chemical databases to  assign just one representation per structure and permit consistency. In PubChem, this representation is called {\em Canonical SMILES}. 
-{\em Isomeric SMILES} are a variation of SMILES in which information on isotopes and stereochemistry (i.e., 3-D structures) is included within the string. A detailed description of the specifics of these canonicalization algorithms, isomeric variations, and stereochemistry is beyond the scope of this paper (REF). 
+{\em Isomeric SMILES} are a variation of SMILES in which information on isotopes and stereochemistry (i.e., 3-D structures) is included within the string. A detailed description of the specifics of these canonicalization algorithms, isomeric variations, and stereochemistry is beyond the scope of this paper (REF). The original SMILES framework was a proprietary framework, but since them new open-standard called OpenSMILES\footnote{OpenSMILES URL: http://opensmiles.org/} has been developed by the chemistry research community.
 %
 %    \begin{itemize}
 %        \item Simplified Molecular Input Line Entry System (SMILES) is a line notation for describing chemical structures in a way that is easier for computers to interpret. 
@@ -44,17 +52,30 @@ One complication with SMILES is that straightforward application of the basic ru
 %        \item Another type of SMILES string that are often used and are also available in our dataset are isometric SMILES. These include isotopic specifications of a chemical structure.
 %    \end{itemize}
     \subsubsection{SMILES Rules}
+    In this section we provide a short overview on how SMILES encode structural information of molecules. For a more detailed treatment, the interested reader is referred to the full OpenSMILES specification. Figure \ref{fig:smile-examples} will be used to illustrate some of these concepts.
+    
+        \begin{figure}[htb]
+        \centering
+        \includegraphics[width=0.25\textwidth]{figures/Smiles-Smile1.png}
+        \includegraphics[width=0.25\textwidth]{figures/Smiles-Smile2.png}
+        \caption{Example of 2 chemical structures and their respective SMILES}
+        \label{fig:smile-examples}
+    \end{figure}
+
+    Basic rules: 
+    
+%    Atoms are represented by their atomic symbol and are enclosed in brackets []. The organic subset can be written without brackets, these include: B, C, N, O, S, F, Cl, Br, and I. Brackets can also be used to remove ambiguities about the charge of the atom. Bonds are represented as follows: 1) $-$ : single bond, 2) $=$ :  double bond, 3) $\#$ : triple bond, and 4) $.$ : disconnected structure.
         \begin{enumerate}
             \item Atoms are represented by their atomic symbol and are enclosed in brackets []. The organic subset can be written without brackets, these include: B, C, N, O, S, F, Cl, Br, and I. Brackets can also be used to remove ambiguities about the charge of the atom. 
-            \item Bonds are represented as follows:
+            \item Bonds are represented as follows: 
             \begin{itemize}
-                \item[$-$] single bond
-                \item[$=$] double bond
-                \item[$\#$] triple bond
-                \item[$.$] disconnected structure
+                \item[$-$] single bond.
+                \item[$=$] double bond.
+                \item[$\#$] triple bond.
+                \item[$.$] disconnected structure.
             \end{itemize}
-            \textbf{Note:} Single bonds can be omitted as shown in Figures \ref{fig:smile-examples} and \ref{fig:smile-examples2}.
-            \item Branches are represented with parenthesis, ().
+            \textbf{Note:} Single bonds can be omitted as shown in the example for  Cyclamic acid, and in Figure \ref{fig:smile-examples} .  This is typically done with the atoms in the organic subset.  %and \ref{fig:smile-examples2}.
+            \item Branches are represented with parenthesis ().
             \item Cyclic structures or carbon rings are represented with digits. The first digit is the beginning of the rings and the matching digit that follows is when the ring closes. This can also be observed in Figures \ref{fig:smile-examples} and \ref{fig:smile-examples2}.
         \end{enumerate}
     \subsubsection{Correspondence between the 2D structure and a SMILES}
@@ -71,13 +92,6 @@ One complication with SMILES is that straightforward application of the basic ru
             \item Finally the green text of the SMILES can be seen inside the green circle. Notice that it is attached to the first carbon of the SMILES (red 'C'). 
         \end{itemize}
     
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.25\textwidth]{figures/Smiles-Smile1.png}
-        \includegraphics[width=0.25\textwidth]{figures/Smiles-Smile2.png}
-        \caption{Example of 2 chemical structures and their respective SMILES}
-        \label{fig:smile-examples}
-    \end{figure}
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{figures/Smiles-Smile3.png}
