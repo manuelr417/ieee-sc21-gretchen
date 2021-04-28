@@ -1,4 +1,21 @@
 \section{Deep Learning Architectures \label{archi}}
+We now turn our attention to the DL models that we have developed for help predict molecular properties.
+\subsection{Overview}
+The main idea in our effort is to apply DL methods to the SMILE string to uncover patterns and crate models that predict molecular properties from first principles and without encoding rules from chemistry. Figure XXX show this idea in the context of a 1-D Convolutional Neural Networks (1-D Convs) . In this figure, a $3 \times 1$ filter is used to scan the string and find patterns in the sequence of atoms and bonds. In practice, this filter does not run directly over the characters but instead  over the {\em character-level embeddings}  of the SMILES string. This approach will be explained in section \ref{embeddings}
+
+
+In this paper, we shall focus on the use of 1-D Convs as the key methods used to build our models. Our work is still early, and we have also experimented with LSTM networks and Transformers. However,  1-D Convs have so far provided us with the best tradeoffs between training speed and prediction error. Comparing all these various methods in detail is part of our future work and is therefore outside the scope of this paper. 
+
+Figure XXX shows the end-to-end machine learning framework that we propose. We start out with a sample of the data in PubChem that contains 600,000 examples. This data sets is split into standard training, validations and test sets. To train the models, the training data is fed as tensor input to the models. Next, a character-level embedding layer takes care of mapping the characters in the SMILE string into an $n$-dimensional vector space. These transformed data are then passed through several 1-D Conv layers to build and detect features in the SMILES strings. Later on, the tensors generated in these layers are ``flattened" from their multi-dimensional structures and fed into fully-connected layers, with the last layer producing the predictions of the model.
+\subsection{Character-level Embeddings \label{embeddings}}
+DL expect their input as tensors, and the SMILES strings are not. Hence, we need a method to represent SMILES in tensor form. In the context of NLP, word embedding and character-level embedding have become the preferred way to accomplish, replacing one-hot encoding and bag-of-words models. The reason is that embeddings can retain the relationships, context, and meaning that existing between adjacent word or characters. 
+
+In our efforts we do not word embeddings but rather character-level embeddings (REF). This is mainly because the structure of the SMILES does not maps with sentences separated by spaces as is the case for regular language sentences. Also, character level embeddings solve the {\em out-of-vocabulary words} issue, that often plagues word embedding methods.
+
+
+Figure XXX shows a SMILE string and a possible character-level embedding into a 3-D vector space. In practice, this vector space can have high dimensions, with some models using a dimension of 256. Finding the right dimension size is still much of an experimental issue. 
+The standard practice is to thread the embedding as  another layer in the neural work, that can be trained to find the right values for the weights that produce the vectors. Some methods allow pre-training these weights on large corpus of target data set, and use transfer learning to enable researchers to focus on the design and tuning of the followup layers (i.e., the layers for the ``downstream task").
+
     % Model descriptions
     \subsection{Deep Learning to Predict Molecular Weight from SMILES}
         \begin{itemize}
