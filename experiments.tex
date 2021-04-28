@@ -47,6 +47,8 @@
         \item The resulting model is the one described in section \ref{archi}, which gave us the results shown in Figures \ref{fig:model20-mol-weight-loss} and \ref{fig:model20-mol-weight-predictions}.
         \item It was noted that the different models trained tended to do good at a subsection of the dataset given, but had higher error with larger molecular weights.
         \item This was likely the result of the distribution of the data as very little of the data was larger than 2,000 g/mol.
+        \item Due to this a few models were trained using only data within 0 and 2,000 g/mol, to see if we could get more precise results in this smaller range.
+        \item The results of the best out of those models can be seen in Figures \ref{fig:model23-mol-weight-loss} and \ref{fig:model23-mol-weight-predictions}
         \item Using this model as a guide we proceeded to develop the next two model for predicting the XLogP value of chemical compounds.
         \item The second model followed the same architecture as the previous, but was tuned so it would be more suited for prediction XLogP, hence why their architecture are so similar.
         \item The results of this model can be seen in Figures \ref{fig:model7-xlogp-loss} and \ref{fig:model7-xlogp-predictions}.
@@ -54,6 +56,7 @@
     \end{itemize}
     
     % Figures
+    % Initial molecular weight model results
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{loss_gragh_20_epoch.PNG}
@@ -66,6 +69,8 @@
         \caption{Results of the first trained model for predicting molecular weight.}
         \label{fig:model2-mol-weight-predictions}
     \end{figure}
+    
+    % Best molecular weight model results
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_20_7_epochs_loss_MolecularWeight.png}
@@ -78,6 +83,22 @@
         \caption{Results latest tuned model for predicting molecular weight.}
         \label{fig:model20-mol-weight-predictions}
     \end{figure}
+    
+    % Best molecular weight < 2000 model results
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{model_23_7_epochs_loss_MolecularWeight.png}
+        \caption{Loss graph of the latest tuned model for predicting molecular weight.}
+        \label{fig:model23-mol-weight-loss}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{model_23_7_epochs_predictions_MolecularWeight.png}
+        \caption{Results latest tuned model for predicting molecular weight.}
+        \label{fig:model23-mol-weight-predictions}
+    \end{figure}
+    
+    % Best XLogP model results
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_7_7_epochs_loss_XLogP.png}
@@ -90,6 +111,8 @@
         \caption{Results of the model trained for predicting XLogP.}
         \label{fig:model7-xlogp-predictions}
     \end{figure}
+    
+    % Fragment XLogP model results
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{figures/XLogP_model_2_5_epochs_loss.png}
@@ -111,24 +134,24 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{figures/graphs-Mol-Wei_Comp1.jpg}
-        \caption{Comparison between the predictions of three of the trained models.}
-        \label{fig:model2-mol-weight-loss}
+        \caption{Comparison of results of the three models that predict the molecular.}
+        \label{fig:comparison_mol_weight}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{model_2_prediction.PNG}
-        \caption{Results of the first trained model for predicting molecular weight.}
+        \includegraphics[width=0.5\textwidth]{}
+        \caption{}
         \label{fig:model2-mol-weight-predictions}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_loss_MolecularWeight.png}
-        \caption{Loss graph of the latest tuned model for predicting molecular weight.}
+        \includegraphics[width=0.5\textwidth]{}
+        \caption{}
         \label{fig:model20-mol-weight-loss}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_predictions_MolecularWeight.png}
-        \caption{Results latest tuned model for predicting molecular weight.}
+        \includegraphics[width=0.5\textwidth]{}
+        \caption{}
         \label{fig:model20-mol-weight-predictions}
     \end{figure}
