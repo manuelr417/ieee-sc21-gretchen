@@ -11,8 +11,8 @@ We can state our problem as follows. Suppose we have a data set $\mathcal{S}$, c
 	\[X = \{\ex{0}, \ex{1}, ..., \ex{m}\}.\] Here each element $\ex{i}$ is an example that represents 
 	some set of base properties extracted from an item $\es{j} \in  \mathcal{S}$. In this case, each example $\ex{i}$ is a multi-dimensional vector with $d$ dimensions
 	\[\ex{i}=(\ex{i}_0, \ex{i}_1, ..., \ex{i}_d)\] and 
-	$X$ can be modeled as a matrix containing these examples.
-	\item {\em Define} one or more deep learning models $M_0, M_1, ... M_p$ that predict the properties in $\mathcal{P}$. Thus, the prediction $y$ for a given model $M_k$ might contain one or more of the properties in $\mathcal{P}$. In other words, in theory, the prediction $y$ can be a multi-dimensional vector $y = (y_0, y_1, ..., y_l)$ , with $l \leq r$, where each component represents some property in $\mathcal{P}$. For simplicity, in this paper we only consider models that predict one property at time from the input data $X$. Hence the model's output is one-dimensional.
+	$X$ can be modeled as an $m \times d$ matrix containing these examples.
+	\item {\em Define} one or more deep learning models $M_0, M_1, ... M_p$ that predict the properties in $\mathcal{P}$. Thus, the prediction $\ey{i}$ for a given model $M_k$ on input $\ex{i}$ might contain one or more of the properties in $\mathcal{P}$. In other words, in theory, a prediction $y$ can be a multi-dimensional vector $y = (y_0, y_1, ..., y_l)$ , with $l \leq r$, where each component represents some property in $\mathcal{P}$. For simplicity, in this paper we only consider models that predict one property at time from the input data $X$. Hence the model's output is one-dimensional (e.g., an integer label, or a real number).
 	\item {\em Train} one or more deep learning models $M_0, M_1, ... M_p$ with the data in $X$. For each $\ex{i}$ in $X$, a given model $M_k$ will output a prediction $\ey{i}$. The collection of predictions $\ey{0}, \ey{1}, ..., \ey{m}$ from each of the $m$ examples in $X$ forms a column vector $Y$,  where
 	\[ Y  = (\ey{0}, \ey{1}, ..., \ey{m}).\] 
 	\item {\em Use} the trained models $M_0, M_1, ... M_p$ to predict properties in $\mathcal{P}$ for previously unseen molecules. 
@@ -44,8 +44,8 @@ these structures. SMILES strings can be mapped into two-dimensional or three-dim
         \label{fig:cyclamic}
     \end{figure}
     
-One complication with SMILES is that straightforward application of the basic rules for generating a SMILES string can yield more than one string representation per molecule. To solve this, some {\em canonicalization} algorithm is typically used in chemical databases to  assign just one representation per structure and permit consistency. In PubChem, this representation is called {\em Canonical SMILES}. In contrast, 
-{\em Isomeric SMILES} are a variation of SMILES in which information on isotopes and stereochemistry (i.e., 3-D structures) is included within the string. A detailed description of the specifics of these canonicalization algorithms, isomeric variations, and stereochemistry is beyond the scope of this paper. The original SMILES framework was a proprietary framework, but since them new open-standard called OpenSMILES\footnote{OpenSMILES URL: http://opensmiles.org/} has been developed by the chemistry research community. The interested reader can find more details in the OpenSMILES specification web site. 
+One complication with SMILES is that straightforward application of the basic rules for generating a SMILES string can yield more than one string representation per molecule. To solve this, some {\em canonicalization} algorithm is typically used in chemical databases to  assign just one representation per structure and permit consistency. In PubChem, this representation is called {\em Canonical SMILES}. Similarly, 
+{\em Isomeric SMILES} are a variation of SMILES in which information on isotopes and stereochemistry (i.e., 3-D structures) is included within the string. A detailed description of the specifics of these canonicalization algorithms, isomeric variations, and stereochemistry is beyond the scope of this paper. The original SMILES framework was a proprietary framework, but since then a new open-standard called OpenSMILES\footnote{OpenSMILES URL: http://opensmiles.org/} has been developed by the chemistry research community. The interested reader can find more details in the OpenSMILES specification web site. 
 %
 %    \begin{itemize}
 %        \item Simplified Molecular Input Line Entry System (SMILES) is a line notation for describing chemical structures in a way that is easier for computers to interpret. 
@@ -86,24 +86,27 @@ One complication with SMILES is that straightforward application of the basic ru
     \subsubsection{Correspondence between the 2-D structure and a SMILES}
     In Figure \ref{fig:smile-examples} we can see two chemical models each with a cyclic structure (i.e., a cycle). Each edge and end of the 2-D model represent a carbon and in both the model and SMILES the hydrogen is omitted as it is assumed that they fill any missing bonds. Notice in the upper sub-figure of Figure \ref{fig:smile-examples} that its SMILES has a double bond which is illustrated in the 2-D model. This double bond is then followed by a digit indicating that the next sequence is for a cyclic structure.  Thus, in this upper figure we can see that structure starts at a carbon which is the starting point for a  cycle, and this cycle has  a double bond as its initial part. 
     
-    In the lower sub-figure of  Figure \ref{fig:smile-examples} we see that the structure for this molecule also  starts with a carbon, in this case it is the one located at the leftmost edge of the triangle. This carbon starts the cycle that includes an oxygen atom and note that when the cycle closes the next part of the SMILES continues from the initial carbon.
-        \begin{itemize}
-            \item In Figure \ref{fig:smile-examples} we can see two chemical models each with a cyclic cycle.             
-            \item Each edge and end of the 2D model represent a carbon and in both the model and SMILES the hydrogen is omitted as it is assumed that they fill any missing bonds.
-            \item Notice in Figure \ref{fig:smile-examples} the leftmost figure its SMILES has a double bond which is illustrated in the 2D model. It is then followed by a digit indicating that the next sequence is for a cyclic structure. 
-            \item So in this first figure we have that it starts at a carbon which is the starting point for a cyclic cycle and the cycle starts with a double bond. 
-            \item In the rightmost image we see similarly that it starts with a carbon, in this case it is the one located at the leftmost edge of the triangle. This carbon starts the cycle that includes an oxygen atom and note that when the cycle closes the next part of the SMILES continues from the initial carbon.
-            \item In Figure \ref{fig:smile-examples2} we can observe a more detailed example that better illustrates how the various rules come together to represent what we see in the 2D model.
-            \item The initial red 'C' in the SMILES is shown in the 2D structure with the red circle. That is our starting position. 
-            \item This is followed by a '1' implying that the red 'C' belongs in a carbon ring and will be treated as the starting point of it. And the carbon ring closes at the orange 'C' since this is followed by the second '1'.
-            \item We can notice as well that the orange 'C' also forms part of a branch as it is enclosed in a parenthesis. The entire branch can be observed in the 2D model inside the purple circle.
-            \item Finally the green text of the SMILES can be seen inside the green circle. Notice that it is attached to the first carbon of the SMILES (red 'C'). 
-        \end{itemize}
+    In the lower sub-figure of  Figure \ref{fig:smile-examples} we see that the structure for this molecule also  starts with a carbon, in this case it is the one located at the leftmost edge of the triangle. This carbon starts the cycle that includes an oxygen atom and note that when the cycle closes the next part of the SMILES continues from the initial carbon. In Figure \ref{fig:smile-examples2} we can observe a more detailed example that better illustrates how the various rules come together to represent what we see in the 2-D model. The initial red `C' in the SMILES is shown in the 2-D structure with the red circle. This is our starting position.  This is followed by a `1' implying that the red `C' belongs in a carbon ring and will be treated as the starting point of it. Then the carbon ring closes at the orange `C' and this atom  is followed by the second `1'. Finally the components circled in  green and magenta are branches and can be seen in the SMILES by the respective text that is colored in green and magenta. 
+     and  of the SMILES can be seen inside the green circle. Notice that the green branch is attached to the red `C' whereas the magenta branch is attached to the orange `C'. 
+     % it is attached to the first carbon of the SMILES (red `C'). 
+%        \begin{itemize}
+%            \item In Figure \ref{fig:smile-examples} we can see two chemical models each with a cyclic cycle.             
+%            \item Each edge and end of the 2D model represent a carbon and in both the model and SMILES the hydrogen is omitted as it is assumed that they fill any missing bonds.
+%            \item Notice in Figure \ref{fig:smile-examples} the leftmost figure its SMILES has a double bond which is illustrated in the 2D model. It is then followed by a digit indicating that the next sequence is for a cyclic structure. 
+%            \item So in this first figure we have that it starts at a carbon which is the starting point for a cyclic cycle and the cycle starts with a double bond. 
+%            \item In the rightmost image we see similarly that it starts with a carbon, in this case it is the one located at the leftmost edge of the triangle. This carbon starts the cycle that includes an oxygen atom and note that when the cycle closes the next part of the SMILES continues from the initial carbon.
+%            \item In Figure \ref{fig:smile-examples2} we can observe a more detailed example that better illustrates how the various rules come together to represent what we see in the 2D model.
+%            \item The initial red 'C' in the SMILES is shown in the 2D structure with the red circle. That is our starting position. 
+%            \item This is followed by a '1' implying that the red 'C' belongs in a carbon ring and will be treated as the starting point of it. And the carbon ring closes at the orange 'C' since this is followed by the second '1'.
+%            \item We can notice as well that the orange 'C' also forms part of a branch as it is enclosed in a parenthesis. The entire branch can be observed in the 2D model inside the purple circle.
+%            \item Finally the green text of the SMILES can be seen inside the green circle. Notice that it is attached to the first carbon of the SMILES (red 'C'). 
+%        \end{itemize}
     
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.5\textwidth]{figures/Smiles-Smile3.png}
+        \includegraphics[width=0.45\textwidth]{figures/Smiles-Smile3.png}
         \caption{Example of how each part of the SMILES string corresponds to the 2D model of the chemical structure.}
         \label{fig:smile-examples2}
     \end{figure}
 \subsection{Applying NLP Ideas}
+A SMILES string can be seen as a ``sentence" that describes the atoms and the structural organization of a molecule in 2-D or 3-D space. The composition as well as the spatial structure of molecules are key determinants to the function of a molecule. Hence, our {\bf key idea} is to apply {\em Natural Language Processing} (NLP) techniques to process this sentence and find patterns that help predict molecular properties. Word embeddings (REFs), character-level embeddings (REFs), 1-D Convolutional Neural Networks (REF), Long short-term memory networks (REF), Attention (REF), Transformers (REF), and many other NLP techniques become key tools that can be applied to this domain. 
