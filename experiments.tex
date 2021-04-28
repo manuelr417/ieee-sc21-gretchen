@@ -23,6 +23,7 @@
             \item To generate the fragments we used the RDKit \cite{rdkit} Python library.
             \item When generated they were stored as a string where each fragment was separated by a white-space.
             \item Since not all of the compounds generated a set of fragments, then when not available the SMILES string was used instead. Acting as a single fragment.
+            \item Most of the fragments generated also had a length of less than 200, with an average length of 144 characters. 
             \item These fragment strings were processed the same way as the SMILES strings.
             \item They were tokenized at a character level, vectorized, and given a padding.
             \item The molecular weight and XLogP of the compounds were also important as they were necessary to establish how good predictions of the models were.
@@ -34,6 +35,23 @@
             \item Finally, the test set consisted of 200,000 elements of the data was used to evaluated the model after training.
             \item The data that was not used was saved for any further testing we might want to do on the model.
         \end{itemize}
+    % Not sure what to call this section, maybe Methodology?
+    \subsection{Training the Models}
+    \begin{itemize}
+        \item The first model implemented was the one for predicting the molecular weight of a compound.
+        \item Initially the padding used for the input data was 300, but was later changed to 1000 since this better accommodated for some of the much longer SMILES strings present in the dataset.
+        \item Also the units for the fully connected layers were both 300, before reaching the final dense layer. 
+        \item The results of this model, shown in Figures \ref{fig:model2-mol-weight-loss} and \ref{fig:model2-mol-weight-predictions}, were promising as a result we proceeded to tune it.
+        \item To tune the model we used the Python library Talos (REF), which permitted us to tune various hyperparameters.
+        \item Some of the initial hyperparameters tuned were: learning rate, epochs, and batch size. \item Later more parameters were included like the amount of units for layers and the kernel size in the convolutional layers.
+        \item The resulting model is the one described in section \ref{archi}, which gave us the results shown in Figures \ref{fig:model20-mol-weight-loss} and \ref{fig:model20-mol-weight-predictions}.
+        \item It was noted that the different models trained tended to do good at a subsection of the dataset given, but had higher error with larger molecular weights.
+        \item This was likely the result of the distribution of the data as very little of the data was larger than 2,000 g/mol.
+        \item Using this model as a guide we proceeded to develop the next two model for predicting the XLogP value of chemical compounds.
+        \item The second model followed the same architecture as the previous, but was tuned so it would be more suited for prediction XLogP, hence why their architecture are so similar.
+        \item The results of this model can be seen in Figures \ref{fig:model7-xlogp-loss} and \ref{fig:model7-xlogp-predictions}.
+        \item Finally, the last model was implemented also using the first one as a base, and gave us the results in Figures \ref{fig:frag2-xlogp-loss} and \ref{fig:frag2-xlogp-predictions}.
+    \end{itemize}
     
     % Figures
     \begin{figure}
@@ -50,25 +68,67 @@
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{model_23_7_epochs_loss_MolecularWeight.png}
+        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_loss_MolecularWeight.png}
         \caption{Loss graph of the latest tuned model for predicting molecular weight.}
-        \label{fig:model23-mol-weight-loss}
+        \label{fig:model20-mol-weight-loss}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{model_23_7_epochs_predictions_MolecularWeight.png}
+        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_predictions_MolecularWeight.png}
         \caption{Results latest tuned model for predicting molecular weight.}
-        \label{fig:model23-mol-weight-predictions}
+        \label{fig:model20-mol-weight-predictions}
     \end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_7_7_epochs_loss_XLogP.png}
-        \caption{Loss graph of the first trained model for predicting XLogP.}
+        \caption{Loss graph of the model trained for predicting XLogP.}
         \label{fig:model7-xlogp-loss}
     \end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_7_7_epochs_predictions_XLogP.png}
-        \caption{Results of the first trained model for predicting XLogP.}
+        \caption{Results of the model trained for predicting XLogP.}
         \label{fig:model7-xlogp-predictions}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/XLogP_model_2_5_epochs_loss.png}
+        \caption{Loss graph of the model that used SMILES and fragments as input for predicting XLogP.}
+        \label{fig:frag2-xlogp-loss}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/XLogP_model_2_5_epochs_predictions.png}
+        \caption{Results of the model that used SMILES and fragments as input for predicting XLogP.}
+        \label{fig:frag2-xlogp-predictions}
+    \end{figure}
+    
+    \subsection{Results}
+    \begin{itemize}
+        \item 
+    \end{itemize}
+    % Figures
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/graphs-Mol-Wei_Comp1.jpg}
+        \caption{Comparison between the predictions of three of the trained models.}
+        \label{fig:model2-mol-weight-loss}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{model_2_prediction.PNG}
+        \caption{Results of the first trained model for predicting molecular weight.}
+        \label{fig:model2-mol-weight-predictions}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_loss_MolecularWeight.png}
+        \caption{Loss graph of the latest tuned model for predicting molecular weight.}
+        \label{fig:model20-mol-weight-loss}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{model_20_7_epochs_predictions_MolecularWeight.png}
+        \caption{Results latest tuned model for predicting molecular weight.}
+        \label{fig:model20-mol-weight-predictions}
     \end{figure}
