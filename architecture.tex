@@ -33,7 +33,7 @@ In our work we do not use word embeddings but rather character-level embeddings 
         \caption{Embedding representation of a SMILES string.}
         \label{fig:smiles-to-embed}
     \end{figure}
-Figure \ref{fig:smiles-to-embed} depicts a SMILE string and a  character-level embedding in a 7-D vector space. Each character is mapped to a vector with 7 dimensions, and each component in such vector is a real number.  In practice, this vector space can have a high dimension, with some models reported in the literature using a dimension of 256. Finding the right dimension size is still much of an experimental issue. This SMILES  string in 
+Figure \ref{fig:smiles-to-embed} depicts a SMILES string and a  character-level embedding in a 7-D vector space. Each character is mapped to a vector with 7 dimensions, and each component in such vector is a real number.  In practice, this vector space can have a high dimension, with some models reported in the literature using a dimension of 256. Finding the right dimension size is still much of an experimental issue. This SMILES  string in 
 Figure \ref{fig:smiles-to-embed} can then be represented as  a $9 \times 7$ matrix, with each row being a transposed embedding vector.
 The standard practice in DL is to threat the embedding as  another layer in the neural work that can be trained to find the right values for the weights that produce the vectors. Some methods allow {\em pre-training} these weights on a very large corpus representative of the target data set, and then load them to form  a pre-trained embedding layer in the model. This form of {\em transfer learning} enables researchers to benefit from these pre-trained embeddings  and 
  focus on the design and tuning of the followup layers (i.e., the layers for the ``downstream task").
@@ -52,8 +52,8 @@ The standard practice in DL is to threat the embedding as  another layer in the 
     in this array is an integer representing the index of the character in the vocabulary. 
     
     The input layer of the network feeds the embedding layer, which maps strings into a  32-D vector space. This layer has an embedding matrix 
-    of  $1000 \times 32$. The embedding is then passed to sequence of six (6)  1-D Convs layers with 256 filters per layer. 
-    In this our figures a symbol of $x2$ means that the same unit repeats twice, whereas $x3$ means that the same unit repeats three times. 
+    of  $1000 \times 32$. The embedding is then passed to a sequence of six (6)  1-D Convs layers with 256 filters per layer. 
+    In  our figures a symbol of $x2$ means that the same unit repeats twice, whereas $x3$ means that the same unit repeats three times. 
 Notice that the first two convolutional layers are identical; they had a kernel of size 7x1 and were followed by 1-D max pooling of size 3.
 The next three convolutional  layers had  kernels with size 3x1 and no pooling. The sixth convolutional layer had kernels of size 3x1 
 and a 1-D max pooling layer of size 3. The result of the convolutions are then passed to a flatten layer, which in turn is passed to the final three dense layers. The first two dense layers consisted of 200 neural units and the final (output) one had only 1 neural unit. All of the dense layers had a ReLU activation function. The final  dense layer gives us the model's prediction of the molecular weight.
@@ -76,9 +76,9 @@ and a 1-D max pooling layer of size 3. The result of the convolutions are then p
     The next task that we discuss is the prediction of the XLogP values from the SMILES strings. This task is more challenging than the previous one, and the interested reader can refer to (REF) for a discussion on the computational methods currently used  in practice to obtain 
     this quantity.  
     
-    The  architecture of our second model can be seen in Figure \ref{fig:xlogp-archi1} . This architecture  is very similar to the one used for predicting the molecular weight. In fact, the input and embedding layers are the same. The difference consists in the units and the kernel sizes used in the convolutional and dense layers. The embedding layer is once again followed by six (6) 1-D Convs with 256 filters in each.
+    The  architecture of our second model can be seen in Figure \ref{fig:xlogp-archi1}. This architecture  is very similar to the one used for predicting the molecular weight. In fact, the input and embedding layers are the same. The difference consists in the units and the kernel sizes used in the convolutional and dense layers. The embedding layer is once again followed by six (6) 1-D Convs with 256 filters in each.
     The kernel sizes differ in this model; the first 2 convolutional layers have a kernel size of 5x1 and the kernel size for the remaining four (4)  is 3x1. A 1-D max pooling layer of size 3 is used after second and sixth 1-D Conv layers. The two (2) dense layers that follow the flatten layer 
-    were changed with respect to the first model, and  now consist  100 and 200 neural units respectively. The final dense layer gives us the model's prediction of the XLogP. As in the previous model for molecular weight, all dense layers used ReLU activation. 
+    were changed with respect to the first model, and  now consist  100 and 200 neural units respectively. The final dense layer has one neural unit and gives us the model's prediction of the XLogP. As in the previous model for molecular weight, all dense layers used ReLU activation. 
     
         \begin{figure}[htbp]
         \centering
@@ -101,11 +101,11 @@ and a 1-D max pooling layer of size 3. The result of the convolutions are then p
     \subsection{Deep Learning to Predict XLogP from SMILES and fragments}
     The third and final task that we discuss is the prediction of XLopP from SMILES and chemical fragments. In this context, 
     fragments are molecules that result from simulated chemical transformations  that mimic  common reactions carried out in the lab to decompose a molecule into simpler parts. This decomposition can shed light into the functional structure and chemical properties of the molecule. The work in (REF) used this idea to explore word embeddings for functional chemical fragments 
-    (i.e., fragments with well-known chemical properties). We used RDKit (REF) and RECAP method to create these fragments.
+    (i.e., fragments with well-known chemical properties). In our work, we used the open-source RDKit - Open-Source Cheminformatics Software   (REF) and RECAP method to create these fragments.
     
     Our model for this task is shown in Figure \ref{fig:xlogp-archi2}. This model differs from the previous two in that is receives two inputs: 1) the SMILES string for the original molecule and 2) a list of SMILES for the fragments of the molecule. Since for this model we have two sets of strings that we want it to use as input, we needed one embedding layer for each type of input received. One of the embedding layers receives the SMILES string for the molecule and the other receives the SMILES for the RECAP fragments of the molecule. In this instance
     the embeddings used a 57-D vector space. All the embeddings are then concatenated and supplied to the 1-D Conv layers that follow. 
-    After the concatenation layer, the models follows the exact same setup as the model used for predicting molecular weight. The output from the final dense layer is the predicted XLogP of the chemical compound.
+    After the concatenation layer, the models follows the exact same setup as the model used for predicting molecular weight. The output from the final dense layer is the predicted XLogP of the chemical compound.  The final dense layer has one neural unit, and as before, all the dense layers use ReLU activation. 
     
 %        \begin{itemize}
 %            \item This model is similar to the first model, it differs in that it receives 2 inputs. 
