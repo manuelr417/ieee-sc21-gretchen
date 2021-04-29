@@ -56,7 +56,7 @@ One complication with SMILES is that straightforward application of the basic ru
 %        \item In our dataset these are called canonical SMILES.
 %        \item Another type of SMILES string that are often used and are also available in our dataset are isometric SMILES. These include isotopic specifications of a chemical structure.
 %    \end{itemize}
-    \subsubsection{SMILES Rules \label{rules}}
+    \subsubsection{SMILES Rules\label{rules}}
     In this section we provide a short overview on how SMILES encode structural information of molecules. Again, for a more detailed treatment, the interested reader is referred to the full OpenSMILES specification. Figure \ref{fig:smile-examples} will be used to illustrate some of these concepts.
     
         \begin{figure}[htb]
@@ -87,6 +87,7 @@ One complication with SMILES is that straightforward application of the basic ru
     In Figure \ref{fig:smile-examples} we can see two chemical models each with a cyclic structure (i.e., a cycle). Each edge and end of the 2-D model represent a carbon and in both the model and SMILES the hydrogen is omitted as it is assumed that they fill any missing bonds. Notice in the upper sub-figure of Figure \ref{fig:smile-examples} that its SMILES has a double bond which is illustrated in the 2-D model. This double bond is then followed by a digit indicating that the next sequence is for a cyclic structure.  Thus, in this upper figure we can see that structure starts at a carbon which is the starting point for a  cycle, and this cycle has  a double bond as its initial part. 
     
     In the lower sub-figure of  Figure \ref{fig:smile-examples} we see that the structure for this molecule also  starts with a carbon, in this case it is the one located at the leftmost edge of the triangle. This carbon starts the cycle that includes an oxygen atom and note that when the cycle closes the next part of the SMILES continues from the initial carbon. In Figure \ref{fig:smile-examples2} we can observe a more detailed example that better illustrates how the various rules come together to represent what we see in the 2-D model. The initial red `C' in the SMILES is shown in the 2-D structure with the red circle. This is our starting position.  This is followed by a `1' implying that the red `C' belongs in a carbon ring and will be treated as the starting point of it. Then the carbon ring closes at the orange `C' and this atom  is followed by the second `1'. Finally the components circled in  green and magenta are branches and can be seen in the SMILES by the respective text that is colored in green and magenta. 
+    % Should this be here?
      and  of the SMILES can be seen inside the green circle. Notice that the green branch is attached to the red `C' whereas the magenta branch is attached to the orange `C'. 
      % it is attached to the first carbon of the SMILES (red `C'). 
 %        \begin{itemize}

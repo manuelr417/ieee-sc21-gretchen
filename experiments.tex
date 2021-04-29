@@ -35,24 +35,25 @@
             \item Finally, the test set consisted of 200,000 elements of the data was used to evaluated the model after training.
             \item The data that was not used was saved for any further testing we might want to do on the model.
         \end{itemize}
-    % Not sure what to call this section, maybe Methodology?
+    % Not sure what to call this section
     \subsection{Training the Models}
     \begin{itemize}
         \item The first model implemented was the one for predicting the molecular weight of a compound.
         \item Initially the padding used for the input data was 300, but was later changed to 1000 since this better accommodated for some of the much longer SMILES strings present in the dataset.
-        \item Also the units for the fully connected layers were both 300, before reaching the final dense layer. 
-        \item The results of this model, shown in Figures \ref{fig:model2-mol-weight-loss} and \ref{fig:model2-mol-weight-predictions}, were promising as a result we proceeded to tune it.
+        \item The results of this model, shown in Figures \ref{fig:model2-mol-weight-loss} and \ref{fig:model2-mol-weight-predictions}, were promising and as a result we proceeded to tune it.
         \item To tune the model we used the Python library Talos (REF), which permitted us to tune various hyperparameters.
-        \item Some of the initial hyperparameters tuned were: learning rate, epochs, and batch size. \item Later more parameters were included like the amount of units for layers and the kernel size in the convolutional layers.
-        \item The resulting model is the one described in section \ref{archi}, which gave us the results shown in Figures \ref{fig:model20-mol-weight-loss} and \ref{fig:model20-mol-weight-predictions}.
-        \item It was noted that the different models trained tended to do good at a subsection of the dataset given, but had higher error with larger molecular weights.
+        \item Some of the initial hyperparameters tuned were: learning rate, epochs, and batch size. \item Later more parameters were included like the amount of units per layer and the kernel size in the convolutional layers.
+        \item Our main metric for comparison was the resulting validation loss of the models.
+        \item The overall best model is the one described in section \ref{archi}, which gave us the results shown in Figures \ref{fig:model20-mol-weight-loss} and \ref{fig:model20-mol-weight-predictions}.
+        \item It was noted, based on the various models trained, that there was a tendency for the models to give good predictions for smaller molecular weights, but as the molecular weight got larger so did the error.
         \item This was likely the result of the distribution of the data as very little of the data was larger than 2,000 g/mol.
-        \item Due to this a few models were trained using only data within 0 and 2,000 g/mol, to see if we could get more precise results in this smaller range.
+        \item Due to this a few models were trained using only data within 0 and 2,000 g/mol, to see if we could get more precise results in this limited range.
         \item The results of the best out of those models can be seen in Figures \ref{fig:model23-mol-weight-loss} and \ref{fig:model23-mol-weight-predictions}
-        \item Using this model as a guide we proceeded to develop the next two model for predicting the XLogP value of chemical compounds.
-        \item The second model followed the same architecture as the previous, but was tuned so it would be more suited for prediction XLogP, hence why their architecture are so similar.
+        \item Using the architecture of the molecular weight model as a guide we proceeded to develop the next two model for predicting the XLogP value.
+        \item The first XLogP model followed the same architecture as the previous, but was tuned so it would be more suited for prediction XLogP, hence why their architecture are so similar.
         \item The results of this model can be seen in Figures \ref{fig:model7-xlogp-loss} and \ref{fig:model7-xlogp-predictions}.
-        \item Finally, the last model was implemented also using the first one as a base, and gave us the results in Figures \ref{fig:frag2-xlogp-loss} and \ref{fig:frag2-xlogp-predictions}.
+        \item Finally, the model which receives as input both SMILES and fragments was implemented similar to the previous model, but with the adjustments needed for the additional input.
+        \item This last model gave us the results shown in Figures \ref{fig:frag2-xlogp-loss} and \ref{fig:frag2-xlogp-predictions}.
     \end{itemize}
     
     % Figures
@@ -74,13 +75,13 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_20_7_epochs_loss_MolecularWeight.png}
-        \caption{Loss graph of the latest tuned model for predicting molecular weight.}
+        \caption{Loss graph of the best overall tuned model for predicting molecular weight.}
         \label{fig:model20-mol-weight-loss}
     \end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_20_7_epochs_predictions_MolecularWeight.png}
-        \caption{Results latest tuned model for predicting molecular weight.}
+        \caption{Results of the best overall tuned model for predicting molecular weight.}
         \label{fig:model20-mol-weight-predictions}
     \end{figure}
     
@@ -88,13 +89,13 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_23_7_epochs_loss_MolecularWeight.png}
-        \caption{Loss graph of the latest tuned model for predicting molecular weight.}
+        \caption{Loss graph of the best tuned model for predicting molecular weights smaller than 2,000.}
         \label{fig:model23-mol-weight-loss}
     \end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{model_23_7_epochs_predictions_MolecularWeight.png}
-        \caption{Results latest tuned model for predicting molecular weight.}
+        \caption{Results of the best tuned model for predicting molecular weights smaller than 2,000.}
         \label{fig:model23-mol-weight-predictions}
     \end{figure}
     
@@ -128,30 +129,53 @@
     
     \subsection{Results}
     \begin{itemize}
-        \item 
+        \item The graphs shown in Figures \ref{fig:model2-mol-weight-predictions}, \ref{fig:model20-mol-weight-predictions}, and \ref{fig:model23-mol-weight-predictions}, show the results of the three molecular weight models after receiving the 200,000 sample test set as input.
+        \item It can be observed that the second and third model had more precise predictions compared to the original as their prediction were closer to the center line that represents the true value.
+        \item It can also be noted from Figures \ref{fig:model20-mol-weight-loss} and \ref{fig:model23-mol-weight-loss} that not many epochs are needed for training the models since the training loss dips quickly and the validation loss tends to stay low during training.
+        \item To have a better idea how the newer models compared to the original we gave each model a small test set as input, the results obtained are in Figure \ref{fig:comparison_mol_weight}.
+        \item The new test set consisted of 500 SMILES that the models had not seen before and the expected molecular weight values were under 2,000 g/mol.
+        \item It can be noted that the two newer models did better at predicting the molecular weight closer to their true value, with the second model giving the best results with a MSE of 37.527.
+        \item The third model although was trained specifically for compounds with molecular weights below 2,000 g/mol still did worse than the second model, this suggests that limiting training to a subset of the data does not help enhance performance.
+        \item Additionally we also compared the two architectures that predict the XLogP value.
+        \item When comparing how both models did with the validation set, Figures \ref{fig:model7-xlogp-predictions} and \ref{fig:frag2-xlogp-predictions}, it can be noted that the results were similar. 
+        \item The first model was slightly more centered on its predictions, while the second leaned more towards predicting lower than the expected value. 
+        \item The behaviour can be better appreciated in Figure \ref{fig:comparison_xlog} where we compare both models on a new test set, similar to how we did with the molecular weight models.
+        \item The models were also given a small test set of 500 new SMILES and for the second model included its fragments.
+        \item The model whose input is exclusively SMILES string performed much better with a MSE of 1.996 compared to the 17.083 from the other. 
+        \item It becomes clear that the model trained using fragments does not do well with large XLogP values.
+        \item As we can see in its graph in Figure \ref{fig:comparison_xlogp} most predictions are clustered together close to the origin of the graph and the largest prediction given is close to 10.
+        \item It should also be noted that when training the XLogP models the validation loss stayed at best close to 1, barely getting lower than that, this can be observed in Figures \ref{fig:model7-xlogp-loss} and \ref{fig:frag2-xlogp-loss}.
+        \item One additional observation of the models developed is that they do not tend to do well on short SMILES strings. 
+        \item This can be observed in Figures \ref{fig:comparison_mol_weight1} and \ref{fig:comparison_xlogp1}, where the models were tested using another test set of 500 SMILES string, this time the strings were limited to having between 5 to 20 characters.
+        \item For all the models the results were more sporadic.
+        \item In the case of the molecular weight models the second model seems to have a limit at around 100 g/mol, it does not seem capable of giving a value lower.
+        \item Regardless it still performed better than the other two, but not by a large margin as in the previous dataset.
+        \item For the XLogP models the first graph is more sporadic while the other concentrates at the bottom, further showing that this model likes to predict below the true value. 
+        
     \end{itemize}
     % Figures
+    % Comparison between all the molecular weight models on new data
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{figures/graphs-Mol-Wei_Comp1.jpg}
-        \caption{Comparison of results of the three models that predict the molecular.}
+        \caption{Comparing results of the three models that predict the molecular.}
         \label{fig:comparison_mol_weight}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{}
-        \caption{}
-        \label{fig:model2-mol-weight-predictions}
+        \includegraphics[width=0.5\textwidth]{figures/graphs-XLog_Comp1.jpg}
+        \caption{Comparing results of the two XLogP architectures implemented.}
+        \label{fig:comparison_xlogp}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{}
-        \caption{}
-        \label{fig:model20-mol-weight-loss}
+        \includegraphics[width=0.5\textwidth]{figures/graphs-Mol-Wei_Comp2.jpg}
+        \caption{Comparing results of the three models that predict the molecular on SMILES string between 5 - 20 characters}
+        \label{fig:comparison_mol_weight1}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\textwidth]{}
-        \caption{}
-        \label{fig:model20-mol-weight-predictions}
+        \includegraphics[width=0.5\textwidth]{figures/graphs-XLog_Comp2.jpg}
+        \caption{Comparing results of the two XLogP architectures implemented on SMILES string between 5 - 20 characters.}
+        \label{fig:comparison_xlogp1}
     \end{figure}
