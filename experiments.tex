@@ -1,40 +1,63 @@
 \graphicspath{ {./figures/} }
 \section{Experiments \label{experiments}}
-    \subsection{Environment}
-        \begin{itemize}
-            \item Python 3.8 was the language used for developing the machine learning models. 
-            \item The libraries used to implement the models were Tensorflow 2.4, Keras, and Jupyter Notebook to help with the visualization.
-            \item The models were trained on a Dell Poweredge R940XA Server that had 2 Intel Xeon Gold 5122 processors, 256GB of RAM, 2 NVIDIA Tesla V100 32G Passive GPU, and a 2TB HDD.
-            \item The server ran a Docker container with the Ubuntu 18.04.4 LTS OS.
-        \end{itemize}
+	In this section, we present experimental results, including the environment, software  and data sets used to obtain these results.
+    \subsection{Computational Environment}
+    All the code used to build the DL models we have presented in this paper was written in Python 3.8. We build these models  using Tensorflow 2.4, Keras 2.4, and Jupyter Notebooks to aid with the visualization. 
+    We trained the models on  a Dell PowerEdge R940XA Server that had 2 Intel Xeon Gold 5122 processors, 256GB of RAM, 2 NVIDIA Tesla V100 32G Passive GPU, and a 2TB HDD. Only one Tesla V100 GPU was allocated to us for training the models. On this server, we ran our software on a Docker container running atop the Ubuntu 18.04 LTS operating system. 
+    
+%        \begin{itemize}
+%            \item Python 3.8 was the language used for developing the machine learning models. 
+%            \item The libraries used to implement the models were Tensorflow 2.4, Keras 2.4, and Jupyter Notebook to help with the visualization.
+%            \item The models were trained on a Dell Poweredge R940XA Server that had 2 Intel Xeon Gold 5122 processors, 256GB of RAM, 2 NVIDIA Tesla V100 32G Passive GPU, and a 2TB HDD.
+%            \item The server ran a Docker container with the Ubuntu 18.04.4 LTS OS.
+%        \end{itemize}
     \subsection{Datasets}
-        \begin{itemize}
-            \item The data used for training the models were obtained from the PubChem database (REF).
-            \item Using the PubChem REST API we were able to generate a dataset of $\sim$1.33 million entries.
-            \item These entries were randomly chosen from the database.
-            \item Each entry contained the following information: CID (the unique identifier used by PubChem), molecular formula, canonical SMILES, isometric SMILES, molecular weight, XLogP, exact mass, TPSA, complexity.
-            \item For training all the models the canonical SMILES were used as input and for the third model fragments were used as well.
-            \item The canonical SMILES was preferred since it gave us enough information about the molecular structure and helped ensure that each compound had a unique SMILES string.
-            \item Most of the SMILES strings had a length of less than 200, with the average length being around 56.
-            \item Since the SMILES consisted of the symbols of the elements and special characters with no white-space, instead of sentences, we considered more effective to tokenize the strings at character level before being given as input to the model. 
-            \item It was then converted into a vector and given padding to ensure they all had the same length.
-            \item The fragments used as input were generated using the RECAP technique.
-            \item Fragments are similar to SMILES string, but instead represent the compound as a set of smaller SMILES strings.
-            \item To generate the fragments we used the RDKit \cite{rdkit} Python library.
-            \item When generated they were stored as a string where each fragment was separated by a white-space.
-            \item Since not all of the compounds generated a set of fragments, then when not available the SMILES string was used instead. Acting as a single fragment.
-            \item Most of the fragments generated also had a length of less than 200, with an average length of 144 characters. 
-            \item These fragment strings were processed the same way as the SMILES strings.
-            \item They were tokenized at a character level, vectorized, and given a padding.
-            \item The molecular weight and XLogP of the compounds were also important as they were necessary to establish how good predictions of the models were.
-            \item The molecular weights from the dataset ranged from $\sim$1 to $\sim$10,000 g/mol, with the average being at $\sim$439.44 g/mol.
-            \item The XLogP from the dataset ranged from $\sim$-70 to $\sim$161, with the average being at $\sim$4.58.
-            \item The dataset was split into 3 subsets: training, validation, and test sets. 
-            \item The training set consisted of 600,000 elements of the data and was used for training the model.
-            \item The validation set consisted of 200,000 elements of the data and was used while training to help fit the hyperparameters of the model.
-            \item Finally, the test set consisted of 200,000 elements of the data was used to evaluated the model after training.
-            \item The data that was not used was saved for any further testing we might want to do on the model.
-        \end{itemize}
+    All the data used to train and test the models were obtained from the PubChem database. We used the PubChem REST API to capture
+    a data set with  $\sim$1.33 million entries. These entries were randomly chosen from the database. For our training and testing, we  then randomly 
+	chose 600,000 entries. Each entry contained the following information: CID (the unique identifier used by PubChem), molecular formula, canonical SMILES, isometric SMILES, molecular weight, XLogP, exact mass, TPSA, and complexity.
+	
+	We used the the canonical SMILES  representation for training all the models, including for the molecular fragments in the third model as well.
+	The canonical SMILES was preferred since it gave us enough information about the molecular structure and helped ensure that each compound had a unique SMILES string. It also was a simpler representation to work with. Recall that since the SMILES consisted of the symbols of the elements and special characters with no white-space, instead of sentences, we considered more effective to tokenize the strings at the character level before being given then as input to the model. 
+	
+	To generate the fragments we used the RDKit \cite{rdkit} Python library, and we use  the RECAP algorithm. 
+	 After being generated, the fragments for a molecule  were stored as a string where each fragment was separated by a white-space.
+	Most of the SMILES strings had a length of less than 200 characters, with the average length being around 56 characters. But a few of them had length of 1000 characters of more. Most of the fragments generated also had a length of less than 200, with an average length of 144 characters. 
+	
+	The molecular weight and XLogP of the compounds were also important elements as they were necessary to establish how good predictions of the models were.The molecular weights in the dataset ranged from $\sim$1 to $\sim$10,000 g/mol, with the average being at $\sim$439.44 g/mol.
+The XLogP in the dataset ranged from $\sim$-70 to $\sim$161, with the average being at $\sim$4.58.
+	
+	   The training set consisted of 600,000 elements of the data and was used for training the model.
+             The validation set consisted of 200,000 elements of the data and was used while training to help fit the hyperparameters of the model.
+             Finally, the test set consisted of 200,000 elements of the data was used to evaluated the model after training.
+            
+            
+%        \begin{itemize}
+%            \item The data used for training the models were obtained from the PubChem database (REF).
+%            \item Using the PubChem REST API we were able to generate a dataset of $\sim$1.33 million entries.
+%            \item These entries were randomly chosen from the database. For our training and testing, we  then randmly 
+%            \item Each entry contained the following information: CID (the unique identifier used by PubChem), molecular formula, canonical SMILES, isometric SMILES, molecular weight, XLogP, exact mass, TPSA, complexity.
+%            \item We used the the canonical SMILES  representation for training all the models, including for the molecular fragments in the third model as well.
+%            \item The canonical SMILES was preferred since it gave us enough information about the molecular structure and helped ensure that each compound had a unique SMILES string.
+%            \item Most of the SMILES strings had a length of less than 200, with the average length being around 56.
+%            \item Since the SMILES consisted of the symbols of the elements and special characters with no white-space, instead of sentences, we considered more effective to tokenize the strings at character level before being given as input to the model. 
+%            \item It was then converted into a vector and given padding to ensure they all had the same length.
+%            \item The fragments used as input were generated using the RECAP technique.
+%            \item Fragments are similar to SMILES string, but instead represent the compound as a set of smaller SMILES strings.
+%            \item To generate the fragments we used the RDKit \cite{rdkit} Python library.
+%            \item When generated they were stored as a string where each fragment was separated by a white-space.
+%            \item Since not all of the compounds generated a set of fragments, then when not available the SMILES string was used instead. Acting as a single fragment.
+%            \item Most of the fragments generated also had a length of less than 200, with an average length of 144 characters. 
+%            \item These fragment strings were processed the same way as the SMILES strings.
+%            \item They were tokenized at a character level, vectorized, and given a padding.
+%            \item The molecular weight and XLogP of the compounds were also important as they were necessary to establish how good predictions of the models were.
+%            \item The molecular weights from the dataset ranged from $\sim$1 to $\sim$10,000 g/mol, with the average being at $\sim$439.44 g/mol.
+%            \item The XLogP from the dataset ranged from $\sim$-70 to $\sim$161, with the average being at $\sim$4.58.
+%            \item The dataset was split into 3 subsets: training, validation, and test sets. 
+%            \item The training set consisted of 600,000 elements of the data and was used for training the model.
+%            \item The validation set consisted of 200,000 elements of the data and was used while training to help fit the hyperparameters of the model.
+%            \item Finally, the test set consisted of 200,000 elements of the data was used to evaluated the model after training.
+%            \item The data that was not used was saved for any further testing we might want to do on the model.
+%        \end{itemize}
     % Not sure what to call this section
     \subsection{Training the Models}
     \begin{itemize}
